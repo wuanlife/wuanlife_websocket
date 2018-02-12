@@ -16,13 +16,23 @@ npm run start
 Websocket消息结构
 ```JSON
 {
-  "uuid": "uasd-qwor", // 唯一标识，可能会有用
-  "source": "system", // 来源，各个channel或者'system'
-  "type": "letter", // 消息类型
-  "data": { // 消息数据
+  "uuid": "uasd-qwor",
+  "source": "system",
+  "type": "letter",
+  "data": {
 
   },
-  "created_at": "2018-02-11T15:02:21.760Z" // 消息创建时间
+  "created_at": "2018-02-11T15:02:21.760Z"
 }
 
 ```
+`uuid` 唯一标识，可能会有用
+
+`source` 来源，各个channel或者'system'
+
+`type` 消息类型
+
+`data` 消息数据，自定义
+
+`created_at` 消息创建时间
+

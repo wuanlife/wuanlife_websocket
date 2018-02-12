@@ -1,4 +1,3 @@
-
 module.exports = function (ws) {
   ws.on('message', function incoming (message) {
     // 过滤心跳监测的信息
