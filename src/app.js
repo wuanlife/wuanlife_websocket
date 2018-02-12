@@ -9,18 +9,27 @@ const customizedLogger = require('./tool/customized-winston-logger')
 
 const jwt = require('jsonwebtoken')
 const fs = require('fs')
-const mongoose = require('mongoose')
+const mysql = require('mysql')
+
 const setInterval = require('timers').setInterval
 
 const publicKey = fs.readFileSync(path.join(__dirname, '../publicKey.pub'))
 
 global.logger = customizedLogger
 
-mongoose.connect(DBConfig.url)
-mongoose.connection.on('connected', () => {
-  console.log('Mongoose connection open to ' + DBConfig.url)
+// 连接数据库
+const connection = mysql.createConnection({
+  host: DBConfig.host,
+  user: DBConfig.username,
+  password: DBConfig.password,
+  database: DBConfig.database
 })
-mongoose.connection.on('error', console.error)
+connection.connect()
+
+// connection.query(`INSERT INTO chat_history (id, sender_id, channel_id, content) VALUES ('keke', '134', 'kekeke', 'wori')`, function (error, results, fields) {
+//   if (error) throw error
+//   // ...
+// })
 
 // const env = process.env.NODE_ENV || 'development' // Current mode
 
