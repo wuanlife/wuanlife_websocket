@@ -5,6 +5,6 @@ module.exports = function (ws) {
     if (message === '@heart') {
       return
     }
-    logger.info('received: %s', message)
+    logger.info('主频道received: %s', message)
   })
 }
