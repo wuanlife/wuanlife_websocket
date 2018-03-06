@@ -13,7 +13,8 @@ module.exports = {
         'node': true
   },
   globals: {
-    "logger": false
+    "logger": false,
+    "Websocket": true,
   },
   rules: {
     // allow console

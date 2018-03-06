@@ -3,15 +3,16 @@ const DBConfig = require('./config').DB
 const path = require('path')
 const url = require('url')
 const WebSocket = require('ws')
-// const WebSocketWrapper = require('./wrapper/wrapper')
-const WebSocketWrapper = require('ws-wrapper')
+const WebSocketWrapper = require('./wrapper/wrapper')
 const receiver = require('./receiver')
 const customizedLogger = require('./tool/customized-winston-logger')
 
 const jwt = require('jsonwebtoken')
 const fs = require('fs')
 const mysql = require('mysql2')
-const users_base = require('./table_modules/users_base')
+const redis = require('redis')
+const { promisify } = require('util')
+const usersBase = require('./table_modules/users_base')
 
 const setInterval = require('timers').setInterval
 
@@ -20,14 +21,29 @@ console.log(`publicKey: ${publicKey}`)
 global.logger = customizedLogger
 
 // 连接数据库
+const connection = mysql.createConnection({
+  host: DBConfig.host,
+  user: DBConfig.username,
+  password: DBConfig.password,
+  database: DBConfig.database
+})
 
-// const connection = mysql.createConnection({
-//   host: DBConfig.host,
-//   user: DBConfig.username,
-//   password: DBConfig.password,
-//   database: DBConfig.database
-// })
-// connection.connect()
+const redisClient = redis.createClient()
+const getAsync = promisify(redisClient.get).bind(redisClient)
+const setAsync = promisify(redisClient.set).bind(redisClient)
+const hsetAsync = promisify(redisClient.hset).bind(redisClient)
+const hkeysAsync = promisify(redisClient.hkeys).bind(redisClient)
+
+async function redisTest () {
+  let res = null
+  try {
+    res = await setAsync('string key', 'string val')
+  } catch (e) {
+    console.log(e)
+  }
+  console.log(res)
+}
+redisTest().then()
 
 // connection.query(`INSERT INTO chat_history (id, sender_id, channel_id, content) VALUES ('keke', '134', 'kekeke', 'wori')`, function (error, results, fields) {
 //   if (error) throw error
@@ -55,13 +71,13 @@ const wss = new WebSocket.Server({
     if (user) {
       info.req.user = user;
       (async () => { // 保存用户信息
-        var userInfo = await users_base.findAll({
+        var userInfo = await usersBase.findAll({
           where: {
             name: user.name
           }
         })
         if (!userInfo.length) {
-          await users_base.create({
+          await usersBase.create({
             name: user.name,
             mail: user.mail || '',
             password: user.password,

@@ -1,4 +1,4 @@
-import { NULL } from 'mysql2/lib/constants/types';
+// const NULL = require('mysql2/lib/constants/types').NULL
 
 // for test
 // TODO: 动态更新stations, 可以通过wss.clients或者其他手段更新监听。
@@ -54,7 +54,7 @@ const chatChannelsReceiver = function (ws, user) {
       (async () => {
         await chat_history.create({
           id: backMessage.uuid,
-          sender_id: user.id || NULL,
+          sender_id: user.id || null,
           channel_id: key,
           content: msg.data.content,
           create_at: new Date()
