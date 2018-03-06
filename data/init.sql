@@ -23,9 +23,10 @@ CREATE TABLE IF NOT EXISTS channel
 
 -- 聊天记录表
 -- 储存聊天室部分的历史记录
+-- 将 id 长度 30 -> 50
 CREATE TABLE IF NOT EXISTS chat_history
 (
-  id VARCHAR(30) NOT NULL COMMENT '消息id(uuid)',
+  id VARCHAR(50) NOT NULL COMMENT '消息id(uuid)',
   sender_id INT UNSIGNED NOT NULL COMMENT '发送者用户id',
   channel_id VARCHAR(30) COLLATE utf8_bin NOT NULL COMMENT '频道id(uuid)',
   content VARCHAR(300) COLLATE utf8_bin NOT NULL COMMENT '发送内容',
