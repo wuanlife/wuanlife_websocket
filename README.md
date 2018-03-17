@@ -8,7 +8,7 @@ e-civ 电子文明 RESTful API
 ------------
 
 ```Shell
-// 开启mongodb后
+// 开启mysql后
 
 npm run start
 ```

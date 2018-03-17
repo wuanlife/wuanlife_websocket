@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS channel
   name CHAR(20) COLLATE utf8_bin NOT NULL COMMENT '频道名',
   meta VARCHAR(3000) COLLATE utf8_bin NOT NULL DEFAULT '{}' COMMENT '频道meta信息，JSON字符串',
   PRIMARY KEY (id)
-)ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='聊天记录表';
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='频道表';
 
 -- 聊天记录表
 -- 储存聊天室部分的历史记录

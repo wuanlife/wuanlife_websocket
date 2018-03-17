@@ -3,7 +3,7 @@ const Sequelize = require('sequelize')
 
 let channel = db.define('channel', {
   id: {
-    type: Sequelize.BIGINT,
+    type: Sequelize.STRING(30),
     primaryKey: true
   },
   name: Sequelize.STRING(20),
