@@ -158,28 +158,16 @@ class WebSocketWrapper extends WebSocketChannel {
         // Process inbound event/request
         var event = {
           'name': msg.a.shift(),
-          'args': msg.a,
-          'requestId': msg.i
+          'args': msg.a
         }
         var channel = msg.c == null ? this : this.channels[msg.c]
         if (!channel) {
-          if (msg.i >= 0) {
-            this._sendReject(msg.i, new Error(
-              `Channel '${msg.c}' does not exist`
-            ))
-          }
           this._debug(`wrapper: Event '${event.name}' ignored ` +
               `because channel '${msg.c}' does not exist.`)
         } else if (channel._emitter.emit(event.name, event)) {
           this._debug(`wrapper: Event '${event.name}' sent to ` +
             'event listener')
         } else {
-          if (msg.i >= 0) {
-            this._sendReject(msg.i, new Error(
-              "No event listener for '" + event.name + "'" +
-              (msg.c ? " on channel '" + msg.c + "'" : '')
-            ))
-          }
           this._debug(`wrapper: Event '${event.name}' had no ` +
             'event listener')
         }
@@ -219,48 +207,10 @@ class WebSocketWrapper extends WebSocketChannel {
     if (channel != null) {
       data.c = channel
     }
-    var request
-    if (isRequest) {
-      /* Unless we send petabytes of data using the same socket,
-        we won't worry about `_lastRequestId` getting too big. */
-      data.i = ++this._lastRequestId
-      // Return a Promise to the caller to be resolved later
-      request = new Promise((resolve, reject) => {
-        var pendReq = this._pendingRequests[data.i] = {
-          'resolve': resolve,
-          'reject': reject
-        }
-        if (this._requestTimeout > 0) {
-          pendReq.timer = setTimeout(() => {
-            reject(new Error('Request timed out'))
-            delete this._pendingRequests[data.i]
-          }, this._requestTimeout)
-        }
-      })
-    }
     // Send the message
     this.send(JSON.stringify(data))
     // Return the request, if needed
-    return request
-  }
-
-  _sendResolve (id, data) {
-    this.send(JSON.stringify({
-      'i': id,
-      'd': data
-    }), true /* ignore max queue length */)
-  }
-
-  _sendReject (id, err) {
-    var isError = err instanceof Error
-    if (isError) {
-      err = JSON.parse(this._errorToJSON(err))
-    }
-    this.send(JSON.stringify({
-      'i': id,
-      'e': err,
-      '_': isError ? 1 : undefined
-    }), true /* ignore max queue length */)
+    return null
   }
 
   get (key) {

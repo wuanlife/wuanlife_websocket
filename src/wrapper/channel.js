@@ -76,7 +76,7 @@ class WebSocketChannel {
     if (this.name == null && WebSocketChannel.NO_WRAP_EVENTS.indexOf(eventName) >= 0) {
       return this._emitter.emit.apply(this._emitter, arguments)
     } else {
-      return this._wrapper._sendEvent(this.name, eventName, arguments)
+      return this._wrapper._sendEvent(this.name, eventName, Array.from(arguments))
     }
   }
 

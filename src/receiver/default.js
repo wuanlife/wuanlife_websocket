@@ -3,8 +3,8 @@ module.exports = function (ws) {
     // 过滤心跳监测的信息
     // TODO: 写一下逻辑分发
     if (message === '@heart') {
-      return
+
     }
-    logger.info('主频道received: %s', message)
+    // logger.info('主频道received: %s', message)
   })
 }
